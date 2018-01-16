@@ -1,8 +1,10 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-from core.forms import SignUpForm
+from login.forms import SignUpForm
+
 
 def signup(request):
     if request.method == 'POST':
@@ -16,4 +18,17 @@ def signup(request):
             return redirect('home')
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
+
+
+def signin(request):
+    username = request.POST.get('username', False)
+    password = request.POST.get('password', False)
+    user = authenticate(username=username, password=password)
+    if user is not None and user.is_active:
+        login(request, user)
+        return HttpResponseRedirect('home')
+    else:
+        form = SignUpForm()
+    return render(request, 'signin.html', {'form': form})
+
