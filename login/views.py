@@ -15,10 +15,10 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('signin')
     else:
         form = SignUpForm()
-    return render(request, 'home.html', {'form': form})
+    return render(request, 'signup.html', {'form': form})
 
 
 def signin(request):
@@ -27,7 +27,7 @@ def signin(request):
     user = authenticate(username=username, password=password)
     if user is not None and user.is_active:
         login(request, user)
-        return HttpResponseRedirect('home')
+        return HttpResponseRedirect('signin')
     else:
         form = SignUpForm()
     return render(request, 'signin.html', {'form': form})
